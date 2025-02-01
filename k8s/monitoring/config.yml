@@ -1,0 +1,9 @@
+metrics:
+  - name: service_health_status
+    help: "Health status of the backend service"
+    type: gauge
+    path: $.status
+    values:
+      healthy: 1
+      unhealthy: 0
+scrape_url: http://backend-service.default.svc.cluster.local:5000/health

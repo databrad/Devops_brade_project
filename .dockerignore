@@ -1,0 +1,7 @@
+.vagrant/
+provisioning/
+tests/
+.gitignore
+vagrantfile
+__pycache__/
+product-api-frontend/

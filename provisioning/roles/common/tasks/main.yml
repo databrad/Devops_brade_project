@@ -1,0 +1,79 @@
+# - name: Update apt cache
+#   apt:
+#     update_cache: yes
+
+# - name: Install essential packages
+#   apt:
+#     name:
+#       - curl
+#       - git
+#       - python3
+#       - python3-pip
+#       - npm
+#       - nodejs
+#     state: present
+
+
+# - name: Update apt cache
+#   apt:
+#     update_cache: yes
+
+# - name: Add deadsnakes PPA for Python versions
+#   apt_repository:
+#     repo: ppa:deadsnakes/ppa
+#     state: present
+
+# - name: Install essential packages
+#   apt:
+#     name:
+#       - curl
+#       - git
+#       - python3.10
+#       - python3.10-venv
+#       - python3.10-dev
+#       - python3-pip
+#       - npm
+#       - nodejs
+#     state: present
+
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Add deadsnakes PPA for Python versions
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+
+- name: Install essential packages
+  apt:
+    name:
+      - curl
+      - git
+      - python3.10
+      - python3.10-venv
+      - python3.10-dev
+      - python3-pip
+      - npm
+      - nodejs
+    state: present
+    
+# - name: Add Python 3.10 to alternatives
+#   command: >
+#     update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
+
+# - name: Set Python 3.10 as default
+#   command: >
+#     update-alternatives --set python3 /usr/bin/python3.10
+
+# - name: Install pip for Python 3.10
+#   shell: |
+#     apt install -y python3.10-distutils
+#     curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+#   args:
+#     executable: /bin/bash
+
+# - name: Update pip3 alternatives
+#   command: >
+#     update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip3 1

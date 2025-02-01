@@ -1,0 +1,175 @@
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       DATABASE_URL: mysql+pymysql://brad:brad_steve@db:3306/product_store
+#     depends_on:
+#       - db
+#     volumes:
+#       - .:/app
+#     container_name: product_store_app
+#     entrypoint: ["./wait-for-it.sh", "db:3306", "--", "python", "run.py"]  # Adjust to your app's start command
+
+#   db:
+#     image: mysql:8.0
+#     container_name: product_store_db
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: product_store
+#       MYSQL_USER: brad
+#       MYSQL_PASSWORD: brad_steve
+#     ports:
+#       - "3306:3306"
+
+
+
+# version: '3.8'
+
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       DATABASE_URL: mysql+pymysql://brad:brad_steve@db:3306/product_store
+#     depends_on:
+#       - db
+#     command: ["sh", "-c", "wait-for-it db:3306 -- python run.py"]
+#     volumes:
+#       - .:/app
+#     container_name: product_store_app
+
+#   db:
+#     image: mysql:8.0
+#     container_name: product_store_db
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: product_store
+#       MYSQL_USER: brad
+#       MYSQL_PASSWORD: brad_steve
+#     ports:
+#       - "3306:3306"
+
+
+# version: '3.8'
+
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       DATABASE_URL: mysql+pymysql://brad:brad_steve@db:3306/product_store
+#     depends_on:
+#       - db
+#     volumes:
+#       - .:/app
+#     container_name: product_store_app
+
+#   db:
+#     image: mysql:8.0
+#     container_name: product_store_db
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root  
+#       MYSQL_DATABASE: product_store
+#       MYSQL_USER: brad
+#       MYSQL_PASSWORD: brad_steve
+#     ports:
+#       - "3306:3306"
+
+
+
+# bon fichier commence ici 
+
+# version: '3.9'  
+
+# services:
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: product_store_app
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - FLASK_ENV=development
+#       - DB_HOST=db
+#       - DB_PORT=3306
+#       - DB_USER=root
+#       - DB_PASSWORD=brad_steve
+#       - DB_NAME=product_store
+#     depends_on:
+#       - db
+#     command: ["sh", "-c", "wait-for-it db:3306 -- python run.py"]
+
+#   db:
+#     image: mysql:8.0
+#     container_name: product_store_db
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: product_store
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - db_data:/var/lib/mysql
+
+# volumes:
+#   db_data:  #persist the db
+
+
+
+version: '3.9'
+
+services:
+  # Backend service (Flask)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product_store_app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_ROOT_USER=root
+      - DB_USER=brad
+      - DB_PASSWORD=brad_steve
+      - DB_NAME=product_store
+    depends_on:
+      - db
+    #command: ["sh", "-c", "wait-for-it db:3306 -- python run.py"]
+
+  # Database service (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: product_store_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: product_store
+      MYSQL_USER: brad
+      MYSQL_PASSWORD: brad_steve
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # # Frontend service (React)
+  # frontend:
+  #   build:
+  #     context: ./product-api-frontend  # The path to your React project directory
+  #     dockerfile: Dockerfile  # Ensure you have a Dockerfile in the React project folder
+  #   container_name: product_store_frontend
+  #   ports:
+  #     - "3000:3000"  # Expose React app on port 3000
+  #   depends_on:
+  #     - app  # Ensure backend is up before frontend starts
+  #   environment:
+  #     - REACT_APP_API_URL=http://0.0.0.0:5000  # Replace with the Flask app URL
+  #   command: ["npm", "start"]  # Run the React app
+
+volumes:
+  db_data:  # Persist the MySQL database data

@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+pymysql
+pytest
+pytest-flask
+cryptography
+flask-cors

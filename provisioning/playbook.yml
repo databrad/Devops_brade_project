@@ -1,0 +1,14 @@
+- hosts: all
+  become: true
+  roles:
+  - role: common
+    tags: common
+
+  - role: database
+    tags: database
+
+  - role: backend
+    tags: backend
+
+  - role: frontend
+    tags: frontend

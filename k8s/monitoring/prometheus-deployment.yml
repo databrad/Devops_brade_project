@@ -1,0 +1,168 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: prometheus-config
+#   namespace: monitoring
+# data:
+#   prometheus.yml: |
+#     global:
+#       scrape_interval: 15s
+
+#     scrape_configs:
+#       - job_name: 'product-store-json'
+#         static_configs:
+#           - targets: ['json-exporter-service.monitoring.svc.cluster.local:7979']
+
+# ---
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: prometheus
+#   namespace: monitoring
+
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: prometheus
+#   namespace: monitoring
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: prometheus
+#   template:
+#     metadata:
+#       labels:
+#         app: prometheus
+#     spec:
+#       serviceAccountName: prometheus
+#       containers:
+#       - name: prometheus
+#         image: prom/prometheus:latest
+#         ports:
+#         - containerPort: 9090
+#         resources:
+#           requests:
+#             memory: "256Mi"
+#             cpu: "250m"
+#           limits:
+#             memory: "512Mi"
+#             cpu: "500m"
+#         volumeMounts:
+#         - name: prometheus-config
+#           mountPath: /etc/prometheus/prometheus.yml
+#           subPath: prometheus.yml
+#       volumes:
+#       - name: prometheus-config
+#         configMap:
+#           name: prometheus-config
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: prometheus-service
+#   namespace: monitoring
+# spec:
+#   type: NodePort
+#   ports:
+#     - port: 9090
+#       targetPort: 9090
+#       nodePort: 30002
+#   selector:
+#     app: prometheus
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+
+    rule_files:
+      - "/etc/prometheus/alert_rules.yml"
+
+    scrape_configs:
+      - job_name: 'product-store-json'
+        static_configs:
+          - targets: ['json-exporter-service.monitoring.svc.cluster.local:7979']
+
+  alert_rules.yml: |
+    groups:
+      - name: product-store-alerts
+        rules:
+          - alert: ApplicationDown
+            expr: up{job="product-store-json"} == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Application is down"
+              description: "The job {{ $labels.job }} has been down for 1 minute."
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: monitoring
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        ports:
+        - containerPort: 9090
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: prometheus-config
+          mountPath: /etc/prometheus/prometheus.yml
+          subPath: prometheus.yml
+        - name: prometheus-config
+          mountPath: /etc/prometheus/alert_rules.yml
+          subPath: alert_rules.yml
+      volumes:
+      - name: prometheus-config
+        configMap:
+          name: prometheus-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+  namespace: monitoring
+spec:
+  type: NodePort
+  ports:
+    - port: 9090
+      targetPort: 9090
+      nodePort: 30002
+  selector:
+    app: prometheus

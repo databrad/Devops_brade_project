@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: product-store-virtualservice
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - product-store-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: backend-service
+        subset: v1
+        port:
+          number: 5000
+      weight: 50
+    - destination:
+        host: backend-service
+        subset: v2
+        port:
+          number: 5000
+      weight: 50

@@ -1,0 +1,68 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: json-exporter
+#   namespace: monitoring
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: json-exporter
+#   template:
+#     metadata:
+#       labels:
+#         app: json-exporter
+#     spec:
+#       containers:
+#       - name: json-exporter
+#         image: prometheuscommunity/json-exporter
+#         args:
+#           - "--scrape-url=http://backend-service.default.svc.cluster.local:5000/health"
+#           - "--port=7979"
+#         ports:
+#         - containerPort: 7979
+#         resources:
+#           requests:
+#             memory: "256Mi"
+#             cpu: "250m"
+#           limits:
+#             memory: "512Mi"
+#             cpu: "500m"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: json-exporter
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: json-exporter
+  template:
+    metadata:
+      labels:
+        app: json-exporter
+    spec:
+      containers:
+      - name: json-exporter
+        image: prometheuscommunity/json-exporter
+        args:
+          - --config.file=/etc/json-exporter/config.yml
+        ports:
+        - containerPort: 7979
+        resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/json-exporter
+            readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: json-exporter-config
