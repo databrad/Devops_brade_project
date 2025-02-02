@@ -31,10 +31,11 @@ steps:
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       tags: |
+        latest
         $(Build.BuildId)
     displayName: 'Build and Push Docker image'
 
-  # Push Docker image to Docker Hub
+# Push Docker image to Docker Hub
   - task: Docker@2
     inputs:
       containerRegistry: 'docker-hub-connection'
