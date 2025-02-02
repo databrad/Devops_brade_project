@@ -28,12 +28,11 @@ steps:
     inputs:
       containerRegistry: 'docker-hub-connection'
       repository: 'bradesteve/product-store-frontend'
-      command: 'buildAndPush'
+      command: 'build'
       Dockerfile: '**/Dockerfile'
       tags: |
         latest
-        $(Build.BuildId)
-    displayName: 'Build and Push Docker image'
+    displayName: 'Build Docker image'
 
 # Push Docker image to Docker Hub
   - task: Docker@2
@@ -43,6 +42,5 @@ steps:
       command: 'push'
       tags: |
         latest
-        $(Build.BuildId)
     displayName: 'Push Docker image to Docker Hub'
 
