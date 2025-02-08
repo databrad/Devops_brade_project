@@ -32,6 +32,7 @@ steps:
       Dockerfile: '**/Dockerfile'
       tags: |
         latest
+        $(Build.BuildId)
     displayName: 'Build Docker image'
 
 # Push Docker image to Docker Hub
@@ -42,5 +43,6 @@ steps:
       command: 'push'
       tags: |
         latest
+        $(Build.BuildId)
     displayName: 'Push Docker image to Docker Hub'
 
