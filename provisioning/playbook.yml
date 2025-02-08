@@ -10,5 +10,3 @@
   - role: backend
     tags: backend
 
-  - role: frontend
-    tags: frontend

@@ -1,9 +1,19 @@
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-    # 'mysql+pymysql://root:root@localhost:3306/product_store' , 'mysql+pymysql://brad:brad_steve@db:3306/product_store'
-    print("Database URI: ", SQLALCHEMY_DATABASE_URI) 
+    USER = os.getenv('DB_USER', 'me')
+    PASSWORD = os.getenv('DB_PASSWORD', 'me')
+    HOST = os.getenv('DB_HOST', 'localhost')
+    PORT = os.getenv('DB_PORT', '3306')
+    DATABASE = os.getenv('DB_NAME', 'mydatabase')
+
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
+    if not SQLALCHEMY_DATABASE_URI:
+        raise ValueError("DATABASE_URL is not set correctly")
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
