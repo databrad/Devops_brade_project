@@ -190,8 +190,9 @@ We can even create dashboards on the web page :
 To define the alert rule, I directly defined it in the prometheus deployment under the data section (`alert_rules.yml`).  
 The alert is triggered when the app is down for more than 1 minute.  
 We can see it in the prometheus and Grafana page since they are linked together:  
-Prometheus:   
-![alert](images/Capture14.PNG)
+Prometheus:  
+
+![alert](images/Capture14.PNG)  
 
 Grafana:  
 ![alert](images/Capture18.PNG)
@@ -213,7 +214,8 @@ For the CI/CD pipeline, I merged the two parts in one file because I was running
 The CI runs the test with pytest, build the the container app and push it to my docker repository.  
 The CD part is not implemented because I am only working on a dev environment.  
 To run the pipeline, I first need to launch on my machine the agent that will be responsible to execute the pipeline.  
-To create an agent to run your pipeline with your personalcomputer, read [personnal agent](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops).  
+To create an agent to run your pipeline with your personalcomputer, read <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops" target="_blank">personnal agent</a>.    
+  
 
 ![agent](images/Capture20.PNG)
 we see that the agent is listening for job, let's trigger our pipeline.  
@@ -221,16 +223,21 @@ Our pipeline is triggered when a pull request is created and the code is merged 
 !! You need tohave docker running on your computer if you execute with an agent too.  
 
 I create a pull request on the main  
+
 ![pull](images/Capture21.PNG)  
 
 I approved and complete the PR, that triggered the pipeline  
+
 ![pipeline](images/Capture22.PNG)  
 
 The pipeline runs succesfully   
+
 ![success](images/Capture23.PNG)  
+
 ![agent success](images/Capture25.PNG)  
 
 And the image is being pushed on my docker repository with a tag number and the latest tag.  
+
 ![pushed](images/Capture24.PNG)  
 
-And that's all for the project :).
+And that's all for the project :) .
