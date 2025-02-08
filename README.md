@@ -25,7 +25,7 @@ Create a .env file in the root project directory where you will define and store
 - DB_USER=your_user
 - DB_PASSWORD=your_password
 - DB_NAME=your_database_name (ex: product_store).  
-Then run ```python python run.py```.  
+Then run ` python run.py`.  
 You can test the endpoints using Postman or the curl command on a terminal.  
 For exemple, the health endpoint :  
 
@@ -37,9 +37,9 @@ To configure and provision a vm using vagrant, you need to install vagrant on yo
 Once installed, you need to define secret as well for your mysql database credentials (username, password and database name).  
 For that, go to provisioning/roles/database/tasks/ and define a yaml file called `vars.yml`.  
 In that file, write:  
-db_name: your_database_name  
-db_user: your_username  
-db_password: your_password.  
+. db_name: your_database_name  
+. db_user: your_username  
+. db_password: your_password.  
 
 Then, go to the root project directory and run `vagrant up` to provision the vm.  
 Wait for the provision, and after it, you should see a vm running in your virtualbox app.  
