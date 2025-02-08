@@ -25,7 +25,7 @@ Create a .env file in the root project directory where you will define and store
 - DB_USER=your_user
 - DB_PASSWORD=your_password
 - DB_NAME=your_database_name (ex: product_store).  
-Then run `python run.py`.
+Then run ```python python run.py```.  
 You can test the endpoints using Postman or the curl command on a terminal.  
 For exemple, the health endpoint :  
 
