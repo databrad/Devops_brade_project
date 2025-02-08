@@ -37,9 +37,9 @@ To configure and provision a vm using vagrant, you need to install vagrant on yo
 Once installed, you need to define secret as well for your mysql database credentials (username, password and database name).  
 For that, go to provisioning/roles/database/tasks/ and define a yaml file called `vars.yml`.  
 In that file, write:  
-. db_name: your_database_name  
-. db_user: your_username  
-. db_password: your_password.  
+- db_name: your_database_name  
+- db_user: your_username  
+- db_password: your_password.  
 
 Then, go to the root project directory and run `vagrant up` to provision the vm.  
 Wait for the provision, and after it, you should see a vm running in your virtualbox app.  
@@ -57,40 +57,34 @@ The backend main yaml file will install the requirements.txt, add the app folder
 
 ## 3- Build and publish a docker image
 
-To build and publish a docker image, you need to have a Dockerfile in the root project directory, you need to have a docker hub account and of course, docker installed on your local machine.
-To build and publish, you first need to login into your docker hub account : 
-Type `docker login` and provide your credential when prompted.
-To build : `docker build -t <your_dockerhub_username>/<repository_name>:<tag>` .
-To push : `docker push <your_dockerhub_username>/<repository_name>:<tag>`
-To test locally : ```bash
-docker run -d -p 5000:5000 \
--e DATABASE_URL="Your_database_url" \
-<your_dockerhub_username>/<repository_name>:<tag>
-```  
+To build and publish a docker image, you need to have a Dockerfile in the root project directory, you need to have a docker hub account and of course, docker installed on your local machine.  
+To build and publish, you first need to login into your docker hub account :   
+Type `docker login` and provide your credential when prompted.  
+To build : `docker build -t <your_dockerhub_username>/<repository_name>:<tag>`.  
+To push : `docker push <your_dockerhub_username>/<repository_name>:<tag>`.  
+To test locally : `docker run -d -p 5000:5000 \-e DATABASE_URL="Your_database_url" \ <your_dockerhub_username><repository_name>:<tag>`.  
 If you don't have the image in your local machine, you need to pull it with  
-`docker pull <your_dockerhub_username>/<repository_name>:<tag>`  
+`docker pull <your_dockerhub_username>/<repository_name>:<tag>`.   
 Example : for my image, execute :  
-- `docker pull bradesteve/product-store-backend`  
-- ```bash docker run -d -p 5000:5000 \
--e DATABASE_URL="your db url" \
-bradesteve/product-store-backend```  
+- `docker pull bradesteve/product-store-backend`.  
+- `docker run -d -p 5000:5000 \-e DATABASE_URL="your db url" \bradesteve/product-store-backend`.   
 
-![my repo](images/Capture5.PNG)
+![my repo](images/Capture5.PNG)  
 
 ## 4- Container orchestration with docker-compose
 
 To container orchestration with docker-compose, you need to have a docker-compose.yml file in the root.  
 The application will consist of two containers: One for the backend file and one for the mysql database.  
 First of all, in the .env file, add the mysql database secret information :  
-MYSQL_ROOT_PASSWORD=root  
-MYSQL_DATABASE=your_db  
-MYSQL_USER=your_user  
-MYSQL_PASSWORD=your_password  
+- MYSQL_ROOT_PASSWORD=root
+- MYSQL_DATABASE=your_db
+- MYSQL_USER=your_user
+- MYSQL_PASSWORD=your_password   
 
 Since the database needs to be available first for the backend to access it, I added a `wait-for-it.sh` script file that will force the backend container to wait until the availability of the database container before it starts.  
 To build the app, you can either run :   
 - `docker build --build-arg DB_USER=your_user --build-arg BD_PASSWORD=your_password --build-arg DB_HOST=your_host --build-arg DB_PORT=your_port --build-arg DB_NAME=your_db_name  -f Dockerfile .` and `docker compose up`  
-- In bash, `DB_USER=your_user BD_PASSWORD=your_password DB_HOST=your_host DB_PORT=your_port DB_NAME=your_db_name docker compose up --build`  
+- In bash, `DB_USER=your_user BD_PASSWORD=your_password DB_HOST=your_host DB_PORT=your_port DB_NAME=your_db_name docker compose up --build`.    
 
 ![docker app running](images/Capture6.PNG)
 
