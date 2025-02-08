@@ -17,7 +17,7 @@ In the following, I will explain how to run the app after cloning it on your own
 
 To run the API locally, make sure you have a mysql server running either a service on your machine or you can pull a mysql image and run it on a docker container.
 
-RUN `pip install -r app/requirements.txt`. 
+RUN `pip install -r app/requirements.txt`.  
 Create a .env file in the root project directory where you will define and store your secret credentials (use exactly the same key names):
 - DB_HOST=your_host (ex: localhost)
 - DB_PORT=your_port (ex :3306)
