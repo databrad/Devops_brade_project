@@ -1,0 +1,48 @@
+name: product-store-ci
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: 'Default'
+
+steps:
+  # Install Python and dependencies
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r app/requirements.txt
+    displayName: 'Install dependencies'
+
+  # Run tests with pytest
+  - script: |
+      pytest --maxfail=1 --disable-warnings -q
+    displayName: 'Run tests'
+
+  # Build Docker image
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'docker-hub-connection'
+      repository: 'bradesteve/product-store-frontend'
+      command: 'build'
+      Dockerfile: '**/Dockerfile'
+      tags: |
+        latest
+        $(Build.BuildId)
+    displayName: 'Build Docker image'
+
+# Push Docker image to Docker Hub
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'docker-hub-connection'
+      repository: 'bradesteve/product-store-frontend'
+      command: 'push'
+      tags: |
+        latest
+        $(Build.BuildId)
+    displayName: 'Push Docker image to Docker Hub'
+

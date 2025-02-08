@@ -4,4 +4,4 @@ pymysql
 pytest
 pytest-flask
 cryptography
-flask-cors
+python-dotenv

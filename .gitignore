@@ -1,3 +1,5 @@
 /.vagrant
 .codegpt
 **/__pycache__
+.env
+provisioning/roles/database/tasks/vars.yml

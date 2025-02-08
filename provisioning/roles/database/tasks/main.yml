@@ -1,10 +1,5 @@
-# - name: Install Python apt module and pip
-#   apt:
-#     name:
-#       - python3-apt
-#       - python3-pip
-#     state: present
-#     update_cache: yes
+- name: Load database variables
+  include_vars: vars.yml
 
 - name: Install MySQL server
   apt:
@@ -18,85 +13,13 @@
     enabled: true
 
 - name: Create MySQL database
-  command: mysql -u root -e "CREATE DATABASE IF NOT EXISTS product_store;"
+  command: >
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
 
 - name: Create MySQL user
-  command: mysql -u root -e "CREATE USER IF NOT EXISTS 'brad'@'%' IDENTIFIED BY 'brad_steve';"
+  command: >
+    mysql -u root -e "CREATE USER IF NOT EXISTS '{{ db_user }}'@'%' IDENTIFIED BY '{{ db_password }}';"
 
 - name: Grant privileges to user
-  command: mysql -u root -e "GRANT ALL PRIVILEGES ON product_store.* TO 'brad'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-
-# - name: Create database
-#   community.mysql.mysql_db:
-#     name: product_store
-#     state: present
-
-# - name: Create database user
-#   community.mysql.mysql_user:
-#     name: brad
-#     password: Brad_Steve2025!
-#     priv: 'product_store.*:ALL,GRANT'
-#     state: present
-
-
-
-# - name: Update apt cache
-#   apt:
-#     update_cache: yes
-
-# - name: Install MySQL server
-#   apt:
-#     name: mysql-server
-#     state: present
-
-# - name: Start MySQL service
-#   service:
-#     name: mysql
-#     state: started
-#     enabled: true
-
-# - name: Create database
-#   mysql_db:
-#     name: product_store
-#     state: present
-
-# - name: Create database user
-#   mysql_user:
-#     name: brad
-#     password: Brad_Steve2025!
-#     priv: 'product_store.*:ALL'
-#     host: '%'
-#     state: present
-
-
-# hosts: all
-# become: yes
-
-# tasks:
-#   - name: Update apt cache
-#     apt:
-#       update_cache: yes
-
-#   - name: Install MySQL server
-#     apt:
-#       name: mysql-server
-#       state: present
-
-#   - name: Start and enable MySQL service
-#     service:
-#       name: mysql
-#       state: started
-#       enabled: true
-
-#   - name: Create database 'product_store'
-#     mysql_db:
-#       name: product_store
-#       state: present
-
-#   - name: Create database user 'brad' with privileges
-#     mysql_user:
-#       name: brad
-#       password: "Brad_Steve2025!"
-#       priv: "*.*:ALL"
-#       host: "%"
-#       state: present
+  command: >
+    mysql -u root -e "GRANT ALL PRIVILEGES ON {{ db_name }}.* TO '{{ db_user }}'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
