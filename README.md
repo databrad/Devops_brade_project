@@ -16,15 +16,16 @@ In the following, I will explain how to run the app after cloning it on your own
 ## 1- Run the API locally
 
 To run the API locally, make sure you have a mysql server running either a service on your machine or you can pull a mysql image and run it on a docker container.
-RUN "pip install -r app/requirements.txt"
+
+RUN `pip install -r app/requirements.txt`. 
 Create a .env file in the root project directory where you will define and store your secret credentials (use exactly the same key names):
-DB_HOST=your_host (ex: localhost)
-DB_PORT=your_port (ex :3306)
-DB_ROOT_USER=root
-DB_USER=your_user
-DB_PASSWORD=your_password
-DB_NAME=your_database_name (ex: product_store)
-Then run "python run.py".
+- DB_HOST=your_host (ex: localhost)
+- DB_PORT=your_port (ex :3306)
+- DB_ROOT_USER=root
+- DB_USER=your_user
+- DB_PASSWORD=your_password
+- DB_NAME=your_database_name (ex: product_store)
+Then run `python run.py`.
 You can test the endpoints using Postman or the curl command on a terminal.
 For exemple, the health endpoint :
 
